@@ -17,14 +17,19 @@
           v-focus
         />
       </div>
-      <div class="w-1/5 text-right">
-        <h3 @click="removeTodo(todo.id)">X</h3> <!-- on click call removeTodo method -->
+      <div class="w-1/5 flex justify-end">
+        <svg @click="deleteTodo(todo.id)" class="w-6 h-6 stroke-current text-grey-500 hover:text-green-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+        <!-- <h3 @click="deleteTodo(todo.id)">X</h3> on click call removeTodo method -->
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
   export default {
     name: 'todo',
     props: {
@@ -51,9 +56,10 @@
       }
     },
     methods: {
-      removeTodo(id) {
-        this.$store.dispatch('deleteTodo', id)
-      },
+      ...mapActions([
+        'deleteTodo',
+        'updateTodo'
+      ]),
       editTodo() {
         this.beforeEditCache = this.title;
         this.editing = true;
@@ -64,7 +70,8 @@
           this.title = this.beforeEditCache
         }
         this.editing = false
-        this.$store.dispatch('updateTodo', {
+        // pass payload to action
+        this.updateTodo({
           'id': this.id,
           'title': this.title,
           'completed': this.completed,
@@ -72,10 +79,11 @@
         })
       },
       completeTodo() {
-        this.$store.dispatch('updateTodo', {
+        // pass payload to action
+        this.updateTodo({
           'id': this.id,
           'title': this.title,
-          'completed': this.completed = true,
+          'completed': this.completed = !this.completed,
           'editing': this.editing,
         })
       },
