@@ -17,8 +17,8 @@
           v-focus
         />
       </div>
-      <div class="w-1/5 flex justify-end">
-        <svg @click="deleteTodo(todo.id)" class="w-6 h-6 stroke-current text-grey-500 hover:text-green-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+      <div @click="deleteTodo(todo.id)" class="w-1/5 flex justify-end">
+        <svg class="w-6 h-6 stroke-current text-grey-500 hover:text-green-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
         </svg>
         <!-- <h3 @click="deleteTodo(todo.id)">X</h3> on click call removeTodo method -->
@@ -56,10 +56,10 @@ import { mapActions } from 'vuex'
       }
     },
     methods: {
-      ...mapActions([
-        'deleteTodo',
-        'updateTodo'
-      ]),
+      ...mapActions({
+        deleteTodo: 'todo/deleteTodo',
+        updateTodo:'todo/updateTodo'
+      }),
       editTodo() {
         this.beforeEditCache = this.title;
         this.editing = true;

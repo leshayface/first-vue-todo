@@ -39,37 +39,34 @@ export default {
     return {
       newTodo: '',
       beforeEditCache: '',
-      idForTodo: 3,
     }
   },
   methods: {
-    ...mapActions([
-      'addTodo'
-    ]),
+    ...mapActions({
+      addTodo: 'todo/addTodo',
+    }),
     addNewTodo() {
       //use this keyword to access data
       //make sure no empty todo can be added
-      if (this.newTodo.trim().length == 0) {
+      if (this.newTodo.trim().length === 0) {
         return
       }
-
+      console.log(this.todos.length);
       // pass payload to action
       this.addTodo({
-        id: this.idForTodo, //sets the new todo id to 3
+        id: this.todos.length+1, //sets the new todo id to the array length plus 1
         title: this.newTodo, //grab text from input (v-model) - two way data binding
       })
 
       this.newTodo = ''; //set newTodo text to empty
-      this.idForTodo++; //increment idForTodo for next todo
     }
   },
   computed: {
     // mix the getters into computed with object spread operator
-    ...mapGetters([
-      'anyRemaining',
-      'todos',
-      // ...
-    ])
+    ...mapGetters('todo',{
+      remaining: 'remaining',
+      todos: 'todos'
+    }),
   }, //computed property is for composing new data derived from other data
 }
 </script>

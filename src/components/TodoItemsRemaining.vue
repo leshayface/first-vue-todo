@@ -3,12 +3,14 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'todo-remaining',
   computed: {
-    remaining() {
-      return this.$store.getters.remaining
-    }
+    ...mapGetters('todo',{
+      remaining: 'remaining',
+    }),
   }
 }
 </script>
