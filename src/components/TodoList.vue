@@ -10,15 +10,18 @@
       /> <!-- use v-model to bind data property -->
     </div>
     <p>TODO LIST</p>
-    <div class="space-y-4 my-6">
-      <todo
-        class="border border-gray-400 rounded flex flex-col justify-between leading-normal p-4 cursor-pointer"
-        v-for="todo in todos"
-        :key="todo.id"
-        :todo="todo"
-      > <!-- grab each item from array as well as its index -->
-      </todo>
-    </div>
+    <draggable v-model="todos">
+      <transition-group>
+        <todo
+          class="space-y-4 my-6 border border-gray-400 rounded flex flex-col justify-between leading-normal p-4 cursor-pointer"
+          v-for="todo in todos"
+          :key="todo.title"
+          :todo="todo"
+        > 
+          {{todo.title}}
+        </todo>
+      </transition-group>
+    </draggable>
     <todo-items-remaining></todo-items-remaining>
      <!-- <div>{{ remaining }} items left</div> computed properties can be referred to like data properties -->
   </div>
@@ -28,12 +31,14 @@
 import Todo from './Todo'
 import TodoItemsRemaining from './TodoItemsRemaining'
 import { mapGetters, mapActions } from 'vuex'
+import draggable from 'vuedraggable'
 
 export default {
   name: 'todo-list',
   components: {
     Todo,
     TodoItemsRemaining,
+    draggable,
   },
   data () {
     return {
