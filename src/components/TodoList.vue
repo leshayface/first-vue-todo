@@ -10,6 +10,9 @@
       /> <!-- use v-model to bind data property -->
     </div>
     <p>TODO LIST</p>
+    <draggable v-model="exampleList">
+      <div v-for="text in exampleList" :key="text">{{text}}</div>
+    </draggable>
     <draggable v-model="todos">
       <transition-group>
         <todo
@@ -44,6 +47,13 @@ export default {
     return {
       newTodo: '',
       beforeEditCache: '',
+      exampleList: [
+        'Item 1',
+        'Item 2',
+        'Item 3',
+        'Item 4',
+        'Item 5'
+      ]
     }
   },
   methods: {
