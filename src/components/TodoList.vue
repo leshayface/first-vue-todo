@@ -10,30 +10,25 @@
       /> <!-- use v-model to bind data property -->
     </div>
     <p>TODO LIST</p>
-    <draggable v-model="exampleList">
-      <div v-for="text in exampleList" :key="text">{{text}}</div>
-    </draggable>
-    <draggable v-model="todos">
-      <transition-group>
-        <todo
-          class="space-y-4 my-6 border border-gray-400 rounded flex flex-col justify-between leading-normal p-4 cursor-pointer"
-          v-for="todo in todos"
-          :key="todo.title"
-          :todo="todo"
-        > 
-          {{todo.title}}
-        </todo>
-      </transition-group>
+    <draggable v-model="todos" v-if="todos" :list="todos">
+      <todo
+        class="space-y-4 my-6 border border-gray-400 rounded flex flex-col justify-between leading-normal p-4 cursor-pointer"
+        v-for="todo in todos"
+        :key="todo.id"
+        :todo="todo"
+      > 
+        {{todo.title}}
+      </todo>
     </draggable>
     <todo-items-remaining></todo-items-remaining>
-     <!-- <div>{{ remaining }} items left</div> computed properties can be referred to like data properties -->
+    <!-- computed properties can be referred to like data properties -->
   </div>
 </template>
 
 <script>
 import Todo from './Todo'
 import TodoItemsRemaining from './TodoItemsRemaining'
-import { mapGetters, mapActions } from 'vuex'
+import { mapActions } from 'vuex'
 import draggable from 'vuedraggable'
 
 export default {
@@ -47,13 +42,6 @@ export default {
     return {
       newTodo: '',
       beforeEditCache: '',
-      exampleList: [
-        'Item 1',
-        'Item 2',
-        'Item 3',
-        'Item 4',
-        'Item 5'
-      ]
     }
   },
   methods: {
@@ -66,7 +54,6 @@ export default {
       if (this.newTodo.trim().length === 0) {
         return
       }
-      console.log(this.todos.length);
       // pass payload to action
       this.addTodo({
         id: this.todos.length+1, //sets the new todo id to the array length plus 1
@@ -77,11 +64,19 @@ export default {
     }
   },
   computed: {
+    todos: {
+      get () {
+        return this.$store.getters['todo/todos'];
+      },
+      set: function (value) {
+        return value
+      }
+    }
     // mix the getters into computed with object spread operator
-    ...mapGetters('todo',{
-      remaining: 'remaining',
-      todos: 'todos'
-    }),
+    // ...mapGetters('todo',{
+    //   remaining: 'remaining',
+    //   todos: 'todos'
+    // }),
   }, //computed property is for composing new data derived from other data
 }
 </script>
